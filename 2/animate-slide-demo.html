@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滑动动画演示</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+            min-height: 100vh;
+        }
+        
+        .content {
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+        }
+        
+        #clickBtn {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #f1f3f4;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        #clickBtn:hover {
+            background-color: #e8eaed;
+        }
+        
+        #clickBtn:active {
+            background-color: #dfe1e5;
+        }
+        
+        #welcomeText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 36px;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+            transition: transform 0.5s ease-in-out;
+            /* 初始位置在屏幕外左侧 */
+            transform: translate(-200%, -50%);
+        }
+        
+        #welcomeText.animate {
+            /* 动画结束位置在屏幕中央 */
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="content">
+        <button id="clickBtn">Click Here!</button>
+        <div id="welcomeText">Welcome!</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickBtn = document.getElementById('clickBtn');
+            const welcomeText = document.getElementById('welcomeText');
+            
+            // 点击按钮触发动画
+            clickBtn.addEventListener('click', function() {
+                // 移除并重新添加动画类，以支持多次点击
+                welcomeText.classList.remove('animate');
+                
+                // 强制重绘
+                void welcomeText.offsetWidth;
+                
+                // 添加动画类
+                welcomeText.classList.add('animate');
+            });
+        });
+    </script>
+</body>
+</html>

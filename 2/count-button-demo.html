@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计数器演示</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .content {
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #counter {
+            font-size: 48px;
+            font-weight: normal;
+            margin-bottom: 20px;
+            color: black;
+            width: 50px;
+        }
+        
+        #countBtn {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #f1f3f4;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        #countBtn:hover {
+            background-color: #e8eaed;
+        }
+        
+        #countBtn:active {
+            background-color: #dfe1e5;
+        }
+        
+        .url-bar {
+            background-color: #3c4043;
+            padding: 6px 12px;
+            border-radius: 4px;
+            margin-left: 16px;
+            font-size: 13px;
+            flex-grow: 1;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .url-icon {
+            margin-right: 8px;
+            color: #9aa0a6;
+        }
+        
+        .tab-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .new-tab-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            color: #9aa0a6;
+            cursor: pointer;
+        }
+        
+        .new-tab-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="browser-header">
+        <div class="close-buttons">
+            <div class="close-btn red"></div>
+            <div class="close-btn yellow"></div>
+            <div class="close-btn green"></div>
+        </div>
+        <div class="tabs">
+        <div class="content">
+        <div id="counter">0</div>
+        <button id="countBtn">Count</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const counter = document.getElementById('counter');
+            const countBtn = document.getElementById('countBtn');
+            let count = 0;
+            
+            // 点击按钮增加计数
+            countBtn.addEventListener('click', function(e) {
+                // 阻止事件冒泡，避免点击按钮时触发页面其他地方的归零事件
+                e.stopPropagation();
+                count++;
+                counter.textContent = count;
+            });
+            
+            // 添加点击其他位置自动归零的功能
+            document.addEventListener('click', function(e) {
+                // 检查点击目标是否是计数按钮或计数器本身
+                const isCountButton = e.target.closest('#countBtn') !== null;
+                const isCounter = e.target.closest('#counter') !== null;
+                
+                // 如果点击的不是这些元素，则重置计数器
+                if (!isCountButton && !isCounter) {
+                    count = 0;
+                    counter.textContent = count;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
