@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20231201005 - Combined Webpage</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #202124;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        h2 {
+            color: #1a73e8;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f0fe;
+        }
+        
+        .content {
+            padding: 20px;
+            min-height: 100px;
+        }
+        
+        /* 计算器样式 */
+        #counter {
+            font-size: 48px;
+            font-weight: normal;
+            margin-bottom: 20px;
+            color: black;
+            width: 50px;
+        }
+        
+        #countBtn {
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #f1f3f4;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        #countBtn:hover {
+            background-color: #e8eaed;
+        }
+        
+        /* 帖子列表样式 */
+        .posts-container {
+            padding: 0;
+        }
+        
+        .post {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .post:hover {
+            background-color: #45a049;
+        }
+        
+        .post.hidden {
+            height: 0;
+            padding: 0 20px;
+            margin-bottom: 0;
+            opacity: 0;
+        }
+        
+        .post-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .hide-btn {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .hide-btn:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+        
+        .reload-btn {
+            margin: 20px auto;
+            display: block;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .reload-btn:hover {
+            background-color: #1976D2;
+        }
+        
+        /* 滑动动画样式 */
+        #welcomeText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 36px;
+            font-weight: bold;
+            transition: transform 0.5s ease-in-out;
+            transform: translate(-200%, -50%);
+        }
+        
+        #welcomeText.animate {
+            transform: translate(-50%, -50%);
+        }
+        
+        #slideBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        #slideBtn:hover {
+            background-color: #1976D2;
+        }
+        
+        /* 加法练习样式 */
+        .equation {
+            font-size: 48px;
+            font-weight: normal;
+            margin-bottom: 20px;
+        }
+        
+        .answer-input {
+            width: 200px;
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+        
+        .score {
+            font-size: 18px;
+            color: #5f6368;
+        }
+        
+        /* 单页演示样式 */
+        .section-tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        .section-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .section-tab.active {
+            border-bottom-color: #1a73e8;
+            color: #1a73e8;
+            font-weight: 500;
+        }
+        
+        .section-content {
+            padding: 20px;
+            display: none;
+        }
+        
+        .section-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>20231201005 - 组合网页</h1>
+            <p>包含所有功能模块的整合页面</p>
+        </header>
+        
+        <!-- 1. 计数器页面 -->
+        <section class="section" id="counter-section">
+            <h2>计数器功能</h2>
+            <div class="content">
+                <div id="counter">0</div>
+                <button id="countBtn">Count</button>
+            </div>
+        </section>
+        
+        <!-- 2. 帖子列表页面 -->
+        <section class="section" id="posts-section">
+            <h2>帖子列表功能</h2>
+            <div class="content">
+                <div class="posts-container" id="posts-container">
+                    <!-- Posts will be generated here -->
+                </div>
+                <button class="reload-btn" id="reload-btn">Reload All Posts</button>
+            </div>
+        </section>
+        
+        <!-- 3. 滑动动画页面 -->
+        <section class="section" id="slide-section">
+            <h2>滑动动画功能</h2>
+            <div class="content" style="position: relative; height: 200px;">
+                <div id="welcomeText">Welcome!</div>
+                <button id="slideBtn" style="position: absolute; top: 10px; left: 10px;">Slide</button>
+            </div>
+        </section>
+        
+        <!-- 4. 加法练习页面 -->
+        <section class="section" id="addition-section">
+            <h2>加法练习功能</h2>
+            <div class="content" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="equation" id="equation">7 + 4</div>
+                <input type="number" class="answer-input" id="answerInput" placeholder="Enter answer">
+                <div class="score" id="score">Score: 1</div>
+            </div>
+        </section>
+        
+        <!-- 5. 单页演示页面 -->
+        <section class="section" id="single-page-section">
+            <h2>单页演示功能</h2>
+            <div class="content">
+                <div class="section-tabs">
+                    <div class="section-tab active" data-target="tab1">Tab 1</div>
+                    <div class="section-tab" data-target="tab2">Tab 2</div>
+                    <div class="section-tab" data-target="tab3">Tab 3</div>
+                </div>
+                <div class="section-content active" id="tab1">
+                    <h3>Tab 1 Content</h3>
+                    <p>This is the content for Tab 1. You can click on other tabs to see different content.</p>
+                </div>
+                <div class="section-content" id="tab2">
+                    <h3>Tab 2 Content</h3>
+                    <p>This is the content for Tab 2. Click on other tabs to switch between different sections.</p>
+                </div>
+                <div class="section-content" id="tab3">
+                    <h3>Tab 3 Content</h3>
+                    <p>This is the content for Tab 3. Each tab has its own unique content.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 计数器功能实现
+            const counter = document.getElementById('counter');
+            const countBtn = document.getElementById('countBtn');
+            let count = 0;
+            
+            // 点击按钮增加计数
+            countBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                count++;
+                counter.textContent = count;
+            });
+            
+            // 点击其他位置自动归零
+            document.addEventListener('click', function(e) {
+                const counterSection = document.getElementById('counter-section');
+                const isInCounterSection = counterSection.contains(e.target);
+                const isCountButton = e.target.closest('#countBtn') !== null;
+                const isCounter = e.target.closest('#counter') !== null;
+                
+                if (isInCounterSection && !isCountButton && !isCounter) {
+                    count = 0;
+                    counter.textContent = count;
+                }
+            });
+            
+            // 2. 帖子列表功能实现
+            const postsContainer = document.getElementById('posts-container');
+            const reloadBtn = document.getElementById('reload-btn');
+            let posts = [];
+            let currentMaxPostId = 0;
+            let isLoading = false;
+            
+            // 生成初始帖子
+            function generateInitialPosts() {
+                posts = [];
+                postsContainer.innerHTML = '';
+                currentMaxPostId = 0;
+                loadMorePosts(10);
+            }
+            
+            // 加载更多帖子
+            function loadMorePosts(count) {
+                for (let i = 1; i <= count; i++) {
+                    createPost(++currentMaxPostId);
+                }
+            }
+            
+            // 创建单个帖子元素
+            function createPost(id) {
+                const post = {
+                    id: id,
+                    title: `Post #${id}`,
+                    isHidden: false
+                };
+                
+                posts.push(post);
+                
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.dataset.id = id;
+                
+                postElement.innerHTML = `
+                    <div class="post-content">
+                        <div class="post-title">${post.title}</div>
+                        <button class="hide-btn" data-id="${id}">Hide</button>
+                    </div>
+                `;
+                
+                postsContainer.appendChild(postElement);
+                
+                // 添加点击事件
+                postElement.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('hide-btn')) {
+                        e.stopPropagation();
+                    }
+                    togglePostVisibility(id);
+                });
+            }
+            
+            // 切换帖子的显示/隐藏状态
+            function togglePostVisibility(id) {
+                const postIndex = posts.findIndex(p => p.id === id);
+                if (postIndex !== -1) {
+                    posts[postIndex].isHidden = !posts[postIndex].isHidden;
+                    const postElement = document.querySelector(`#posts-section .post[data-id="${id}"]`);
+                    
+                    if (posts[postIndex].isHidden) {
+                        postElement.classList.add('hidden');
+                        setTimeout(() => {
+                            postElement.style.display = 'none';
+                        }, 300);
+                    } else {
+                        postElement.style.display = 'block';
+                        setTimeout(() => {
+                            postElement.classList.remove('hidden');
+                        }, 10);
+                    }
+                }
+            }
+            
+            // 重新加载所有帖子
+            reloadBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                generateInitialPosts();
+            });
+            
+            // 初始化帖子
+            generateInitialPosts();
+            
+            // 点击其他位置自动重置所有隐藏的帖子
+            document.addEventListener('click', function(e) {
+                const postsSection = document.getElementById('posts-section');
+                const isInPostsSection = postsSection.contains(e.target);
+                const isPostElement = e.target.closest('.post') !== null;
+                const isHideButton = e.target.closest('.hide-btn') !== null;
+                const isReloadButton = e.target.closest('#reload-btn') !== null;
+                
+                if (isInPostsSection && !isPostElement && !isHideButton && !isReloadButton) {
+                    const hasHiddenPosts = posts.some(p => p.isHidden);
+                    if (hasHiddenPosts) {
+                        posts.forEach(post => {
+                            if (post.isHidden) {
+                                post.isHidden = false;
+                                const postElement = document.querySelector(`#posts-section .post[data-id="${post.id}"]`);
+                                if (postElement) {
+                                    postElement.style.display = 'block';
+                                    setTimeout(() => {
+                                        postElement.classList.remove('hidden');
+                                    }, 10);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            
+            // 3. 滑动动画功能实现
+            const welcomeText = document.getElementById('welcomeText');
+            const slideBtn = document.getElementById('slideBtn');
+            
+            slideBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                welcomeText.classList.remove('animate');
+                void welcomeText.offsetWidth;
+                welcomeText.classList.add('animate');
+            });
+            
+            // 4. 加法练习功能实现
+            const equation = document.getElementById('equation');
+            const answerInput = document.getElementById('answerInput');
+            const scoreDisplay = document.getElementById('score');
+            
+            let quizScore = 1;
+            let firstNumber = 7;
+            let secondNumber = 4;
+            let correctAnswer = 11;
+            
+            // 生成新题目
+            function generateNewQuestion() {
+                firstNumber = Math.floor(Math.random() * 10) + 1;
+                secondNumber = Math.floor(Math.random() * 10) + 1;
+                correctAnswer = firstNumber + secondNumber;
+                equation.textContent = `${firstNumber} + ${secondNumber}`;
+                answerInput.value = '';
+                answerInput.focus();
+            }
+            
+            // 检查答案
+            function checkAnswer() {
+                const userAnswer = parseInt(answerInput.value);
+                if (!isNaN(userAnswer)) {
+                    if (userAnswer === correctAnswer) {
+                        quizScore++;
+                        scoreDisplay.textContent = `Score: ${quizScore}`;
+                        setTimeout(generateNewQuestion, 300);
+                    } else {
+                        answerInput.value = '';
+                        answerInput.focus();
+                    }
+                }
+            }
+            
+            // 监听输入框事件
+            answerInput.addEventListener('keydown', function(e) {
+                if (event.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+            
+            answerInput.addEventListener('blur', function() {
+                if (answerInput.value.trim() !== '') {
+                    checkAnswer();
+                }
+            });
+            
+            // 5. 单页演示功能实现
+            const sectionTabs = document.querySelectorAll('.section-tab');
+            sectionTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // 隐藏所有内容
+                    document.querySelectorAll('.section-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // 移除所有标签的活动状态
+                    document.querySelectorAll('.section-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // 显示目标内容
+                    document.getElementById(target).classList.add('active');
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加法练习</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+        }
+        
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .equation {
+            font-size: 48px;
+            font-weight: normal;
+            margin-bottom: 20px;
+        }
+        
+        .answer-input {
+            width: 200px;
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+        
+        .score {
+            font-size: 18px;
+            color: #5f6368;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="content">
+        <div class="equation" id="equation">7 + 4</div>
+        <input type="number" class="answer-input" id="answerInput" placeholder="Enter answer">
+        <div class="score" id="score">Score: 1</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const equation = document.getElementById('equation');
+            const answerInput = document.getElementById('answerInput');
+            const scoreDisplay = document.getElementById('score');
+            
+            let score = 1;
+            let firstNumber, secondNumber, correctAnswer;
+            
+            // 生成新题目
+            function generateNewQuestion() {
+                // 生成1-10之间的随机数
+                firstNumber = Math.floor(Math.random() * 10) + 1;
+                secondNumber = Math.floor(Math.random() * 10) + 1;
+                correctAnswer = firstNumber + secondNumber;
+                
+                // 更新题目显示
+                equation.textContent = `${firstNumber} + ${secondNumber}`;
+                
+                // 清空输入框并聚焦
+                answerInput.value = '';
+                answerInput.focus();
+            }
+            
+            // 检查答案
+            function checkAnswer() {
+                const userAnswer = parseInt(answerInput.value);
+                
+                // 确保输入是有效数字
+                if (!isNaN(userAnswer)) {
+                    // 答案正确
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                        scoreDisplay.textContent = `Score: ${score}`;
+                        // 延迟生成新题目，给用户一点时间看到结果
+                        setTimeout(generateNewQuestion, 300);
+                    }
+                    // 答案错误 - 分数归零
+                    else {
+                        score = 0;
+                        scoreDisplay.textContent = `Score: ${score}`;
+                        answerInput.value = '';
+                        answerInput.focus();
+                    }
+                }
+            }
+            
+            // 监听输入框的回车事件
+            answerInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+            
+            // 监听输入框的失焦事件（当用户点击其他地方时）
+            answerInput.addEventListener('blur', function() {
+                if (answerInput.value.trim() !== '') {
+                    checkAnswer();
+                }
+            });
+            
+            // 初始化第一个题目（使用截图中的示例）
+            firstNumber = 7;
+            secondNumber = 4;
+            correctAnswer = 11;
+            
+            // 聚焦输入框
+            answerInput.focus();
+        });
+    </script>
+</body>
+</html>

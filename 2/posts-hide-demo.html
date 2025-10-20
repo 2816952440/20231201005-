@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帖子隐藏演示</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .content {
+            padding: 0;
+        }
+        
+        .posts-container {
+            padding: 16px;
+        }
+        
+        .post {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .post:hover {
+            background-color: #45a049;
+        }
+        
+        .post.hidden {
+            height: 0;
+            padding: 0 20px;
+            margin-bottom: 0;
+            opacity: 0;
+        }
+        
+        .post-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .hide-btn {
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .hide-btn:hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+        
+        .reload-btn {
+            margin: 20px auto;
+            display: block;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .reload-btn:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="posts-container" id="posts-container">
+                <!-- Posts will be generated here -->
+            </div>
+            <button class="reload-btn" id="reload-btn">Reload All Posts</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const postsContainer = document.getElementById('posts-container');
+            const reloadBtn = document.getElementById('reload-btn');
+            let posts = [];
+            
+            // 当前已加载的最大帖子ID
+            let currentMaxPostId = 0;
+            
+            // 生成初始帖子
+            function generateInitialPosts() {
+                posts = [];
+                postsContainer.innerHTML = '';
+                currentMaxPostId = 0;
+                
+                // 初始加载10个帖子
+                loadMorePosts(10);
+            }
+            
+            // 加载更多帖子
+            function loadMorePosts(count) {
+                for (let i = 1; i <= count; i++) {
+                    createPost(++currentMaxPostId);
+                }
+            }
+            
+            // 创建单个帖子元素
+            function createPost(id) {
+                const post = {
+                    id: id,
+                    title: `Post #${id}`,
+                    isHidden: false
+                };
+                
+                posts.push(post);
+                
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.dataset.id = id;
+                
+                postElement.innerHTML = `
+                    <div class="post-content">
+                        <div class="post-title">${post.title}</div>
+                        <button class="hide-btn" data-id="${id}">Hide</button>
+                    </div>
+                `;
+                
+                postsContainer.appendChild(postElement);
+                
+                // 添加点击事件 - 点击帖子本身或隐藏按钮都能隐藏帖子
+                postElement.addEventListener('click', function(e) {
+                    // 防止事件冒泡导致的重复隐藏
+                    if (e.target.classList.contains('hide-btn')) {
+                        e.stopPropagation();
+                    }
+                    togglePostVisibility(id);
+                });
+            }
+            
+            // 切换帖子的显示/隐藏状态
+            function togglePostVisibility(id) {
+                const postIndex = posts.findIndex(p => p.id === id);
+                if (postIndex !== -1) {
+                    posts[postIndex].isHidden = !posts[postIndex].isHidden;
+                    const postElement = document.querySelector(`.post[data-id="${id}"]`);
+                    
+                    if (posts[postIndex].isHidden) {
+                        postElement.classList.add('hidden');
+                        // 隐藏后延迟移除，让动画完成
+                        setTimeout(() => {
+                            postElement.style.display = 'none';
+                        }, 300);
+                    } else {
+                        postElement.style.display = 'block';
+                        setTimeout(() => {
+                            postElement.classList.remove('hidden');
+                        }, 10);
+                    }
+                }
+            }
+            
+            // 重新加载所有帖子
+            reloadBtn.addEventListener('click', function() {
+                generateInitialPosts();
+                // 滚动到页面顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // 初始化页面
+            generateInitialPosts();
+            
+            // 添加滚动事件监听，实现无限滚动
+            window.addEventListener('scroll', function() {
+                // 当滚动到页面底部附近时，加载更多帖子
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                    // 使用防抖技术避免频繁触发
+                    if (!isLoading) {
+                        isLoading = true;
+                        // 模拟网络延迟
+                        setTimeout(() => {
+                            loadMorePosts(5); // 每次加载5个新帖子
+                            isLoading = false;
+                        }, 500);
+                    }
+                }
+            });
+            
+            // 防抖标志
+            let isLoading = false;
+            
+            // 添加点击其他位置自动重置所有隐藏帖子的功能
+            document.addEventListener('click', function(e) {
+                // 检查点击目标是否是帖子元素、隐藏按钮或重新加载按钮
+                const isPostElement = e.target.closest('.post') !== null;
+                const isHideButton = e.target.closest('.hide-btn') !== null;
+                const isReloadButton = e.target.closest('.reload-btn') !== null;
+                
+                // 如果点击的不是这些元素，则重置所有隐藏的帖子
+                if (!isPostElement && !isHideButton && !isReloadButton) {
+                    // 检查是否有隐藏的帖子需要重置
+                    const hasHiddenPosts = posts.some(p => p.isHidden);
+                    if (hasHiddenPosts) {
+                        // 遍历所有帖子
+                        posts.forEach(post => {
+                            if (post.isHidden) {
+                                post.isHidden = false;
+                                const postElement = document.querySelector(`.post[data-id="${post.id}"]`);
+                                if (postElement) {
+                                    postElement.style.display = 'block';
+                                    setTimeout(() => {
+                                        postElement.classList.remove('hidden');
+                                    }, 10);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
