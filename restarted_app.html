@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单页应用模拟 - 已重启</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .menu {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+        .menu button {
+            margin: 0 10px;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .menu button:hover {
+            background-color: #2980b9;
+        }
+        .content {
+            min-height: 300px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .status {
+            text-align: center;
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>单页应用示例</h1>
+        <p class="status">项目已重启成功！</p>
+        
+        <div class="menu">
+            <button onclick="showSection(1)">部分 1</button>
+            <button onclick="showSection(2)">部分 2</button>
+            <button onclick="showSection(3)">部分 3</button>
+        </div>
+        
+        <div id="main-content" class="content">
+            <h2>欢迎使用单页应用</h2>
+            <p>请点击上方按钮查看不同部分的内容。</p>
+            <p>这个静态页面模拟了Django应用的功能，因为服务器环境暂时无法正常运行。</p>
+        </div>
+    </div>
+
+    <script>
+        // 内容数据
+        const sections = {
+            1: {
+                title: "部分 1",
+                content: "这是第一部分的内容。在实际的Django应用中，这些内容会通过Ajax从服务器加载。"
+            },
+            2: {
+                title: "部分 2",
+                content: "这是第二部分的内容。您可以在这个部分添加更多详细信息。"
+            },
+            3: {
+                title: "部分 3",
+                content: "这是第三部分的内容。项目结构已按照单页应用的方式设计。"
+            }
+        };
+
+        // 显示指定部分的内容
+        function showSection(num) {
+            const content = sections[num];
+            if (content) {
+                const contentDiv = document.getElementById('main-content');
+                contentDiv.innerHTML = `
+                    <h2>${content.title}</h2>
+                    <p>${content.content}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
