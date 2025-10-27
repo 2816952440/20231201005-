@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简无限滚动示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .item {
+            background: #f4f4f4;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .end-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>无限滚动示例</h1>
+        <div id="content-container">
+            <!-- 内容将在这里动态生成 -->
+        </div>
+        <div class="loading">加载中...</div>
+        <div class="end-message">已经到底了！</div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentPage = 1;
+        let isLoading = false;
+        let hasMore = true;
+        const itemsPerPage = 10;
+        const totalItems = 100;
+        const container = document.getElementById('content-container');
+        const loadingElement = document.querySelector('.loading');
+        const endElement = document.querySelector('.end-message');
+
+        // 初始加载
+        document.addEventListener('DOMContentLoaded', () => {
+            loadItems();
+            window.addEventListener('scroll', handleScroll);
+        });
+
+        // 滚动处理函数
+        function handleScroll() {
+            // 检查是否到达底部附近
+            if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 100) {
+                loadItems();
+            }
+        }
+
+        // 加载更多项目
+        function loadItems() {
+            // 防止重复加载或没有更多数据时继续加载
+            if (isLoading || !hasMore) return;
+
+            // 设置加载状态
+            isLoading = true;
+            loadingElement.style.display = 'block';
+
+            // 模拟网络请求延迟
+            setTimeout(() => {
+                // 计算当前页的项目范围
+                const startIndex = (currentPage - 1) * itemsPerPage + 1;
+                const endIndex = Math.min(currentPage * itemsPerPage, totalItems);
+
+                // 生成并添加新内容
+                for (let i = startIndex; i <= endIndex; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'item';
+                    item.textContent = `这是项目 #${i} - 通过无限滚动加载的内容`;
+                    container.appendChild(item);
+                }
+
+                // 更新状态
+                currentPage++;
+                hasMore = endIndex < totalItems;
+                isLoading = false;
+                loadingElement.style.display = 'none';
+
+                // 如果没有更多内容，显示结束消息
+                if (!hasMore) {
+                    endElement.style.display = 'block';
+                }
+            }, 800); // 800ms延迟模拟网络请求
+        }
+    </script>
+</body>
+</html>
